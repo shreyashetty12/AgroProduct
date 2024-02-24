@@ -1,0 +1,212 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+		integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+	<title>Seller SignUp Form</title>
+
+	<style>
+		.popup {
+			position: relative;
+			display: inline-block;
+			cursor: pointer;
+		}
+
+		/* The actual popup (appears on top) */
+		.popup .popuptext {
+			visibility: hidden;
+			width: 160px;
+			background-color: #555;
+			color: #fff;
+			text-align: center;
+			border-radius: 6px;
+			padding: 8px 0;
+			position: absolute;
+			z-index: 1;
+			bottom: 125%;
+			left: 50%;
+			margin-left: 350px;
+		}
+
+		/* Popup arrow */
+		.popup .popuptext::after {
+			content: "";
+			position: absolute;
+			top: 100%;
+			left: 50%;
+			margin-left: -5px;
+			border-width: 5px;
+			border-style: solid;
+			border-color: #555 transparent transparent transparent;
+		}
+
+		/* Toggle this class when clicking on the popup container (hide and show the popup) */
+		.popup .show {
+			visibility: visible;
+			-webkit-animation: fadeIn 1s;
+			animation: fadeIn 1s
+		}
+
+		/* Add animation (fade in the popup) */
+		@-webkit-keyframes fadeIn {
+			from {
+				opacity: 0;
+			}
+
+			to {
+				opacity: 1;
+			}
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+			}
+
+			to {
+				opacity: 1;
+			}
+		}
+	</style>
+
+
+	<script>
+		var pwd = false;
+		function myFunction() {
+			btnAccess();
+			var popup = document.getElementById("myPopup");
+			popup.classList.toggle("show");
+
+
+		}
+
+		function alphaValidate(p) {
+			var pthis = document.getElementById(p).value;
+			var finalArr = [];
+			var area = /^[a-zA-Z ]/;
+			for (var i = 0; i < pthis.length; i++) {
+				if (area.test(pthis[i])) {
+					finalArr.push(pthis[i]);
+				}
+			}
+			document.getElementById(p).value = finalArr.join('');
+			btnAccess();
+		}
+
+
+		function validatePassword() {
+			var newPassword = document.getElementById('sellerPassword').value;
+			var minNumberofChars = 4;
+			var maxNumberofChars = 6;
+			var regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+			pwd = true;
+			if (!regularExpression.test(newPassword) || minNumberofChars > newPassword.length || newPassword.length > maxNumberofChars) {
+
+				pwd = false;
+				return false;
+			}
+
+		}
+
+		function btnAccess() {
+
+			var sName = document.getElementById("sellerName").value;
+			var sAddress = document.getElementById("sellerAddress").value;
+			var sEmail = document.getElementById("sellerEmail").value;
+			var sPswrd = document.getElementById("sellerPassword").value;
+			var sGST = document.getElementById("sellerGST").value;
+			var sContact = document.getElementById("sellerContact").value;
+
+			var sComapny = document.getElementById("sellerCompany").value;
+			var sComapnyDsc = document.getElementById("sellerCompanyDesc").value;
+			var sWebsite = document.getElementById("sellerWebsite").value;
+			if (sName.length >= 3 && sAddress.length >= 3 && sEmail.length >= 3 && sGST.length == 15 && sContact.length == 10 && sComapny.length >= 3 && sComapnyDsc.length >= 3 && sWebsite.length >= 3) {
+				validatePassword();
+
+				if (pwd) {
+
+					document.querySelector("#ordBtn").disabled = false;
+				} else {
+					var popup = document.getElementById("errorpwd");
+					popup.classList.toggle("show");
+					document.querySelector("#ordBtn").disabled = true;
+				}
+
+			} else {
+
+
+				document.querySelector("#ordBtn").disabled = true;
+			}
+		};
+
+
+
+
+	</script>
+</head>
+
+<body onload="myFunction()">
+
+	<div th:insert="navbar"></div>
+
+	<div class="container">
+		<h3>Seller SignUp Form</h3>
+		<hr>
+
+		<div class="popup" th:if="${!userStatus.isEmpty()}">
+			<span class="popuptext" id="myPopup">You are an existing user!!!</span>
+
+		</div>
+
+		<form action="#" th:action="@{/seller/save}" th:object="${theSeller}" method="POST">
+
+			<input type="text" th:field="*{sellerName}" class="form-control mb-4 col-4" placeholder="Seller Name"
+				onkeyup="alphaValidate(id)" />
+
+			<input type="text" th:field="*{sellerAddress}" class="form-control mb-4 col-4" placeholder="Seller Address"
+				onkeyup="alphaValidate(id)" />
+
+			<input type="text" th:field="*{sellerEmail}" class="form-control mb-4 col-4" placeholder="Seller Email"
+				onkeyup="btnAccess()" />
+
+			<div class="popup">
+				<span class="popuptext" id="errorpwd">Password should contain minimum of 1 number, 1 special charecter
+					and length must be between 4 to 6</span>
+			</div>
+
+			<input type="password" th:field="*{sellerPassword}" class="form-control mb-4 col-4"
+				placeholder="Seller Password" onkeyup="btnAccess()" />
+
+
+			<input type="number" th:field="*{sellerGST}" class="form-control mb-4 col-4"
+				placeholder="15 Digit Seller GST" onkeyup="btnAccess()" />
+
+			<input type="number" th:field="*{sellerContact}" class="form-control mb-4 col-4"
+				placeholder="Seller Contact" onkeyup="btnAccess()" />
+
+			<input type="text" th:field="*{sellerCompany}" onkeyup="alphaValidate(id)" class="form-control mb-4 col-4"
+				placeholder="Seller Company" />
+
+			<input type="text" th:field="*{sellerCompanyDesc}" class="form-control mb-4 col-4"
+				placeholder="Seller Company Description" onkeyup="btnAccess()" />
+
+			<input type="text" th:field="*{sellerWebsite}" class="form-control mb-4 col-4" placeholder="Seller Website"
+				onkeyup="btnAccess()" />
+
+			<button type="submit" id="ordBtn" class="btn btn-info col-4">SignUp</button>
+
+		</form>
+
+		<hr>
+
+	</div>
+</body>
+
+</html>

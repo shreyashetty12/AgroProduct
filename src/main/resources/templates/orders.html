@@ -1,0 +1,127 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+		integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+	<title>My Orders</title>
+
+	<style>
+		img {
+			width: 100px;
+			height: 100px;
+
+		}
+
+		table {
+			border: 1px solid #666;
+			table-layout: fixed;
+			width: 180px;
+		}
+
+		th,
+		td {
+			border: 1px solid #666;
+			width: 90px;
+			overflow: hidden;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div th:insert="navbar"></div>
+
+	<div class="container">
+		<h1 th:if="${isBuyer}">My Orders</h1>
+		<h1 th:if="${isSeller}">Top Price for Product Stock</h1>
+		<hr>
+
+		<table th:if="${!orders.isEmpty()}" class="table table-bordered table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th>Order ID</th>
+					<th>Date</th>
+					<th>Product</th>
+					<th>Quantity Demanded</th>
+					<th>Amount Demanded</th>
+					<th th:if="${isBuyer}">Status</th>
+					<th th:if="${isBuyer}"></th>
+					<th th:if="${isSeller}"></th>
+					<th th:if="${isSeller}"></th>
+
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr th:each="temp : ${orders}">
+					<td th:text="${temp.orderId}" />
+					<td th:text="${temp.date}" />
+
+					<td>
+						<ul>
+							<li th:each="product : ${temp.products}"
+								th:text="${product.productName} + ' - Rs. ' + ${product.productPrice}+'.00/-'"></li>
+							<li th:each="product : ${temp.products}">
+
+								<img th:src="@{${product.productImage}}" />
+
+							</li>
+						</ul>
+					</td>
+					<td th:text="${temp.requestedQuantity}+' KG'" />
+					<td th:text="'  Rs. ' +${temp.requestedPrice} + '.00/- '" />
+
+
+					<div th:if="${isBuyer}">
+						<td th:text="${temp.status}" />
+
+						<td>
+
+							<a th:if="${temp.status} =='ACCEPTED' AND ${temp.availableStock} >=${temp.requestedQuantity} "
+								th:text="'Payment should be done within 24 Hours from '+ ${temp.acceptedTime} +' to avoid of cancellation.'"></a>
+							<br>
+
+							<a th:if="${temp.status} =='ACCEPTED' AND ${temp.availableStock} >=${temp.requestedQuantity} "
+								th:href="@{'/order/payment/'+${temp.orderId}}">Pay Now </a>
+
+
+							<a
+								th:if="${temp.status} =='ACCEPTED' AND ${temp.requestedQuantity} > ${temp.availableStock}  ">Sorry
+								! Currently stock is not available.</a>
+							<a th:if="${temp.status} =='PENDING WITH SELLER' ">Please wait for Seller to confirm your
+								order.</a>
+							<a th:if="${temp.status} =='REJECTED' ">Sorry ! Seller has rejected your order.</a>
+							<a th:if="${temp.status} =='CANCELLED' ">Sorry ! Order has been cancelled due to delay in
+								payment.</a>
+							<a th:if="${temp.amountPaid} >0 AND ${temp.status} !='ACCEPTED' ">Hope you are happy with
+								the product.</a>
+						</td>
+					</div>
+					<div th:if="${isSeller}">
+						<td><a th:href="@{'/seller/confirm/'+${temp.orderId}}">Confirm Order</a></td>
+						<td><a th:href="@{'/seller/reject/'+${temp.orderId}}">Reject Order</a></td>
+					</div>
+
+				</tr>
+			</tbody>
+		</table>
+
+		<div th:if="${orders.isEmpty()}">
+			<h3>Sorry... No Orders yet...</h3>
+			<br>
+			<a th:if="${isBuyer}" th:href="@{/cart}" class="btn btn-primary btn-sm mb-3">
+				Go to Cart
+			</a>
+		</div>
+	</div>
+
+</body>
+
+</html>

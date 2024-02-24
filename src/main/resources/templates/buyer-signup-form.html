@@ -1,0 +1,183 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+		integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+	<title>Buyer SignUp Form</title>
+
+	<style>
+		.popup {
+			position: relative;
+			display: inline-block;
+			cursor: pointer;
+		}
+
+		/* The actual popup (appears on top) */
+		.popup .popuptext {
+			visibility: hidden;
+			width: 160px;
+			background-color: #555;
+			color: #fff;
+			text-align: center;
+			border-radius: 6px;
+			padding: 8px 0;
+			position: absolute;
+			z-index: 1;
+			bottom: 125%;
+			left: 50%;
+			margin-left: 350px;
+		}
+
+		/* Popup arrow */
+		.popup .popuptext::after {
+			content: "";
+			position: absolute;
+			top: 100%;
+			left: 50%;
+			margin-left: -5px;
+			border-width: 5px;
+			border-style: solid;
+			border-color: #555 transparent transparent transparent;
+		}
+
+		/* Toggle this class when clicking on the popup container (hide and show the popup) */
+		.popup .show {
+			visibility: visible;
+			-webkit-animation: fadeIn 1s;
+			animation: fadeIn 1s
+		}
+
+		/* Add animation (fade in the popup) */
+		@-webkit-keyframes fadeIn {
+			from {
+				opacity: 0;
+			}
+
+			to {
+				opacity: 1;
+			}
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+			}
+
+			to {
+				opacity: 1;
+			}
+		}
+	</style>
+
+
+	<script>
+		var pwd = false;
+		function myFunction() {
+			btnAccess();
+			var popup = document.getElementById("myPopup");
+			popup.classList.toggle("show");
+		};
+
+		function alphaValidate(p) {
+			var pthis = document.getElementById(p).value;
+			var finalArr = [];
+			var area = /^[a-zA-Z ]/;
+			for (var i = 0; i < pthis.length; i++) {
+				if (area.test(pthis[i])) {
+					finalArr.push(pthis[i]);
+				}
+			}
+			document.getElementById(p).value = finalArr.join('');
+			btnAccess();
+		};
+
+
+		function validatePassword() {
+			var newPassword = document.getElementById('buyerPassword').value;
+			var minNumberofChars = 4;
+			var maxNumberofChars = 6;
+			var regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+			pwd = true;
+			if (!regularExpression.test(newPassword) || minNumberofChars > newPassword.length || newPassword.length > maxNumberofChars) {
+
+				pwd = false;
+				return false;
+			}
+
+		};
+
+		function btnAccess() {
+
+			var bName = document.getElementById("buyerName").value;
+			var bEmail = document.getElementById("buyerEmail").value;
+			var bPswd = document.getElementById("buyerPassword").value;
+			var bPhone = document.getElementById("buyerPhone").value;
+
+			if (bName.length >= 3 && bEmail.length >= 5 && bPhone.length == 10) {
+				validatePassword();
+
+				if (pwd) {
+
+					document.querySelector("#ordBtn").disabled = false;
+				} else {
+					var popup = document.getElementById("errorpwd");
+					popup.classList.toggle("show");
+					document.querySelector("#ordBtn").disabled = true;
+				}
+			} else {
+				document.querySelector("#ordBtn").disabled = true;
+			}
+		};
+
+	</script>
+
+</head>
+
+<body onload="myFunction()">
+
+	<div th:insert="navbar"></div>
+
+	<div class="container">
+		<h3>Buyer SignUp Form</h3>
+		<hr>
+
+		<div class="popup" th:if="${!userStatus.isEmpty()}">
+			<span class="popuptext" id="myPopup">You are an existing user!!!</span>
+
+		</div>
+		<form action="#" th:action="@{/buyer/save}" th:object="${theBuyer}" method="POST">
+
+			<input type="text" th:field="*{buyerName}" class="form-control mb-4 col-4" placeholder="Buyer Name"
+				onkeyup="alphaValidate(id)" />
+
+			<input type="text" th:field="*{buyerEmail}" class="form-control mb-4 col-4" placeholder="Buyer Email"
+				onkeyup="btnAccess()" />
+
+			<div class="popup">
+				<span class="popuptext" id="errorpwd">Password should contain minimum of 1 number, 1 special charecter
+					and length must be between 4 to 6</span>
+			</div>
+
+			<input type="password" th:field="*{buyerPassword}" class="form-control mb-4 col-4"
+				placeholder="Buyer Password" onkeyup="btnAccess()" />
+
+			<input type="number" th:field="*{buyerPhone}" class="form-control mb-4 col-4" placeholder="Buyer Phone no."
+				onkeyup="btnAccess()" />
+
+			<button type="submit" id="ordBtn" class="btn btn-info col-4">SignUp</button>
+
+		</form>
+
+		<hr>
+
+	</div>
+</body>
+
+</html>

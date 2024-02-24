@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+		integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+	<title>User Login Form</title>
+	<style>
+		img {
+			float: right;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div th:insert="navbar"></div>
+
+	<div class="container">
+		
+		<marquee direction="left" >
+<h1>Welcome to AgroProduct!</h1>
+</marquee>
+
+
+		<hr>
+		<h6>Login to start using our services</h6>
+
+		<img src="/image/loginpageimage.jpg" style="width:700px; height:500px;">
+		<form action="#" th:action="@{/user/login}" th:object="${theUser}" method="POST">
+			<input type="text" th:field="*{username}" class="form-control mb-4 col-4" placeholder="Username" /> <input
+				type="password" th:field="*{password}" class="form-control mb-4 col-4" placeholder="Password" />
+
+			<button type="submit" class="btn btn-info col-4">Login</button>
+
+
+		</form>
+
+	</div>
+
+	<br></br>
+	<div class="container">
+		<h5>Don't Have an account?</h5>
+		<form action="#" th:action="@{/buyer/signup}">
+
+			<button type="submit" class="btn btn-info col-4">Buyer
+				Register</button>
+		</form>
+		<br></br>
+		<form action="#" th:action="@{/seller/signup}">
+			<button type="submit" class="btn btn-info col-4">Seller
+				Register</button>
+		</form>
+
+
+	</div>
+</body>
+
+</html>

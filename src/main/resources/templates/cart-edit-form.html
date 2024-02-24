@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+		integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+	<title>Update Cart</title>
+
+	<style>
+		img {
+			width: 150px;
+			height: 150px;
+		}
+	</style>
+
+
+
+	<script>
+
+		function myFunction() {
+			var q = document.getElementById("requestedQuantity").value;
+			var p = document.getElementById("requestedPrice").value;
+			if (q != 0 && q != '' && p != 0 && p != '') {
+
+				document.querySelector("#ordBtn").disabled = false;
+			} else {
+
+
+				document.querySelector("#ordBtn").disabled = true;
+			}
+		};
+
+		function setEmptyInitial() {
+			myFunction();
+			document.getElementById("requestedQuantity").value = '';
+			document.getElementById("requestedPrice").value = '';
+
+		}
+
+
+	</script>
+
+</head>
+
+<body onload="setEmptyInitial()">
+	<div th:insert="navbar"></div>
+	<div class="container">
+
+		<form th:each="score: ${orders}" action="#" th:action="@{'/order/update/'+ ${score.orderId}}"
+			th:object="${orders}" method="POST">
+			<a>Demand Price per KG</a> <input type="number" th:field="*{requestedPrice}" class="form-control mb-4 col-4"
+				placeholder="Product Price" onkeyup="myFunction()" />
+
+			<a>Demand Quantity in KG</a><input type="number" th:field="*{requestedQuantity}"
+				class="form-control mb-4 col-4" placeholder="Required Quantity" onkeyup="myFunction()" />
+			<br></br>
+
+
+			<button type="submit" aria-disabled="true" id="ordBtn" class="btn btn-info mb-4 col-4">Order
+				Product</button>
+
+
+
+
+			<div th:if="*{requestedQuantity}!=0 AND *{requestedQuantity}!=''">
+				<button type="submit" disabled class="btn btn-info mb-4 col-4">Order Product</button>
+			</div>
+		</form>
+
+
+	</div>
+
+	<br><br>
+
+</body>
+
+</html>

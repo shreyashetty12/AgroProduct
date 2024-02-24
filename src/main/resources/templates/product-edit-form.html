@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+		integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+	<title>Update Product</title>
+
+	<style>
+		img {
+			width: 150px;
+			height: 150px;
+		}
+	</style>
+
+</head>
+<div th:insert="navbar"></div>
+<div class="container" th:if="${stocks}">
+
+
+
+	<form th:each="score: ${theProduct}" action="#" th:action="@{'/product/update/'+ ${score.productId}}"
+		th:object="${theProduct}" enctype="multipart/form-data" method="POST">
+
+		<input type="text" th:field="*{productName}" readonly class="form-control mb-4 col-4" placeholder="Product Name" />
+
+		<input type="number" th:field="*{productPrice}" class="form-control mb-4 col-4" placeholder="Product Price" />
+
+		<input type="text" th:field="*{productDesc}" class="form-control mb-4 col-4"
+			placeholder="Product Description" />
+
+		<input type="file" name="file"  class="mb-4 col-4 img" placeholder="Upload Product Image" />
+
+		<br></br>
+		<button type="submit" class="btn btn-info mb-4 col-4">Update Product</button>
+
+	</form>
+
+
+
+</div>
+
+<br><br>
+<!--
+
+	<div th:each="temp : ${stocks}" th:insert="navbar"></div>
+
+	<div  class="container">
+		<h3>Product Form</h3>
+	
+		<hr>
+		<p class="h4 mb-4">Save Product</p>
+		
+		<form 
+			action="#" 
+			th:action="@{/product/save}" 
+			th:object="${stocks}" 
+			enctype="multipart/form-data"
+			method="POST">
+			
+			<input 
+				type="text" 
+				th:field="*{productName}" 
+				value="${temp.product.productName}"
+				class="form-control mb-4 col-4" 
+				placeholder="Product Name" />
+				
+			<input 
+				type="number" 
+				th:field="*{productPrice}" 
+				class="form-control mb-4 col-4" 
+				placeholder="Product Price" />
+			
+			<input 
+				type="text" 
+				th:field="*{productDesc}" 
+				class="form-control mb-4 col-4" 
+				placeholder="Product Description" />
+						
+			<input 
+				type="file" 
+				name="file"
+				class="mb-4 col-4 img"
+				placeholder="Upload Product Image" />
+		
+				<br></br>
+			<button type="submit" class="btn btn-info mb-4 col-4">Save Product</button>
+			
+		</form>
+		
+		<hr>
+		<a th:href="@{/stock/list}">Back to Stock List</a>
+		
+	</div> -->
+</body>
+
+</html>

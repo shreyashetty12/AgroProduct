@@ -1,0 +1,165 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+	<title>Save Product</title>
+	
+	<style>
+      img {
+        width:150px;
+        height:150px;
+      }
+	</style>
+	
+</head>
+<div th:insert="navbar"></div>
+<div class="container" th:if="${stocks}">
+	
+	
+    <table  class="table table-striped table-hover table-bordered table-responsive-md" >
+        <thead class="thead-dark">
+        <tr>
+            <th class="text-center, align-middle">Product</th>
+            <th class="text-center, align-middle">Product Price (Per KG)</th>
+            <th class="text-center, align-middle">Product Description</th>   
+            <th class="text-center, align-middle">Product Stock/Quantity</th> 
+            
+            <th></th>         
+        </tr>
+        </thead>
+        
+        <tbody>
+			
+		
+        <tr contenteditable="true" th:each="score: ${stocks}">
+				<!--
+			<form 
+			action="#" 
+			th:action="@{'/stock/update/'+ ${score.stockId}}" 
+		th:name="stocks"
+			method="POST">
+			
+			th:object="${stocks}"  -->
+			
+            <td  contenteditable="false"  th:text="${score.product.productName}"></td>
+            <td  th:text="${score.product.productPrice}" ></td>
+            <td  th:text="${score.product.productDesc}" ></td> 
+            <td   th:text="${score.stockQuantity}" ></td>  
+            <td> 
+				<form method="GET"   th:action="@{'/stock/update/'+ ${score.stockId}}">
+            <button type="submit" name="submit" value="value" class="link-button">UPDATE</button>
+        </form>
+        </td>
+        <!--
+	<td contenteditable="false"></td>				
+             <button type="submit" class="btn btn-info ">Update Product</button>    
+              </form> 
+        </tr>
+       -->
+       
+      
+        </tbody>
+    </table>
+     <br><br>
+      <form th:each="score: ${theProduct}"
+			action="#" 
+			th:action="@{'/product/update/'+ ${score.productId}}"
+			th:object="${theProduct}" 
+			enctype="multipart/form-data"
+			method="POST">
+			
+			<input 
+				type="text" 
+				th:field="*{productName}" 
+				class="form-control mb-4 col-4" 
+				placeholder="Product Name" />
+				
+			<input 
+				type="number" 
+				th:field="*{productPrice}" 
+				class="form-control mb-4 col-4" 
+				placeholder="Product Price" />
+			
+			<input 
+				type="text" 
+				th:field="*{productDesc}" 
+				class="form-control mb-4 col-4" 
+				placeholder="Product Description" />
+						
+			<input 
+				type="file" 
+				name="file"
+				class="mb-4 col-4 img"
+				placeholder="Upload Product Image" />
+		
+				<br></br>
+			<button type="submit" class="btn btn-info mb-4 col-4">Save Product</button>
+			
+		</form>
+      
+     
+     
+</div>
+ 
+ <br><br>
+<!--
+
+	<div th:each="temp : ${stocks}" th:insert="navbar"></div>
+
+	<div  class="container">
+		<h3>Product Form</h3>
+	
+		<hr>
+		<p class="h4 mb-4">Save Product</p>
+		
+		<form 
+			action="#" 
+			th:action="@{/product/save}" 
+			th:object="${stocks}" 
+			enctype="multipart/form-data"
+			method="POST">
+			
+			<input 
+				type="text" 
+				th:field="*{productName}" 
+				value="${temp.product.productName}"
+				class="form-control mb-4 col-4" 
+				placeholder="Product Name" />
+				
+			<input 
+				type="number" 
+				th:field="*{productPrice}" 
+				class="form-control mb-4 col-4" 
+				placeholder="Product Price" />
+			
+			<input 
+				type="text" 
+				th:field="*{productDesc}" 
+				class="form-control mb-4 col-4" 
+				placeholder="Product Description" />
+						
+			<input 
+				type="file" 
+				name="file"
+				class="mb-4 col-4 img"
+				placeholder="Upload Product Image" />
+		
+				<br></br>
+			<button type="submit" class="btn btn-info mb-4 col-4">Save Product</button>
+			
+		</form>
+		
+		<hr>
+		<a th:href="@{/stock/list}">Back to Stock List</a>
+		
+	</div> -->
+</body>
+
+</html>
